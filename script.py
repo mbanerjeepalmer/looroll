@@ -141,6 +141,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'loorollv2.settings')
 django.setup()
 from loorollv2app.models import Roll
 
-html = open(filename, 'r', encoding="utf-8")
+html = open(filename, 'r', encoding="utf-8").read()
+html
 r = Roll(html_string=html)
 r.save()
