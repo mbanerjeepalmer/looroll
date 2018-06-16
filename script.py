@@ -20,7 +20,7 @@ if not creds or creds.invalid: # I don't believe this fully works. At the moment
 GMAIL = discovery.build('gmail', 'v1', http=creds.authorize(Http()))
 filename = 'joinedemails/{0}-{1}-{2}.html'.format(*datetime.date.today().timetuple())
 
-def ListMessagesMatchingQuery(service, user_id, query='list@ben-evans.com'):
+def ListMessagesMatchingQuery(service, user_id, query=''):
     """List all Messages of the user's mailbox matching the query.
     Args:
     service: Authorized Gmail API service instance.
@@ -97,7 +97,7 @@ def hit_send(service, mimedocument):
 
 def great_search():
     # this needs a query argument
-    query = 'label:unroll.me newer_than:1d'
+    query = 'list@ben-evans.com'
     messages = ListMessagesMatchingQuery(GMAIL, 'me', query)
     identities = []
     for message in messages:
