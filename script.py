@@ -10,17 +10,15 @@ import requests
 from bs4 import BeautifulSoup
 import django
 
-os.chdir('/home/cachaoonpython/gmail-test')
-
 SCOPES = 'https://www.googleapis.com/auth/gmail.modify'
-store = file.Storage('storage.json')
+store = file.Storage('secrets/storage.json')
 creds = store.get()
 if not creds or creds.invalid: # I don't believe this fully works. At the moment I need to delete 'storage.json' to trigger this flow.
-    flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
+    flow = client.flow_from_clientsecrets('secrets/client_secret.json', SCOPES)
     creds = tools.run_flow(flow, store)
 
 GMAIL = discovery.build('gmail', 'v1', http=creds.authorize(Http()))
-filename = '{0}-{1}-{2}.html'.format(*datetime.date.today().timetuple())
+filename = 'joinedemails/{0}-{1}-{2}.html'.format(*datetime.date.today().timetuple())
 
 def ListMessagesMatchingQuery(service, user_id, query=''):
     """List all Messages of the user's mailbox matching the query.
