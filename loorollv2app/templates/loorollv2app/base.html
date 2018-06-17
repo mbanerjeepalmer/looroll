@@ -2,18 +2,9 @@
 
 <html>
     <head>
-        <title>Rango - {% block title %}How to Tango with Django!{% endblock %}</title>
+        <title>Loo Roll</title>
     </head>
-
     <body>
-        <div>
           {% block body_block %}{% endblock %}
-        </div>
-        {% if user.is_authenticated %}
-            <li><a href="{% url 'restricted' %}">Restricted Page</a></li>
-            <li><a href="{% url 'logout' %}">Log out</a></li>
-        {% else %}
-            <li><a href="{% url 'login'}">Log in</a></li>
-        {% endif %}
     </body>
 </html>

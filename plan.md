@@ -62,3 +62,66 @@ At great length realised I could just block it for everyone and then only allow 
 
 ### TO DO
 Deploy!
+
+## 16 June
+Spent a shit ton of time on it today. Essentially 11 - 11 while watching the world cup.
+Deployed and made it production-ready using environment variables. (Is that bad? Should I be using something else?)
+Now need to plan what happens next. I think it's either how the emails are displayed or from where I get them.
+
+### TO DO
+It's probably more useful to start with where I get them from? Otherwise it's making an insufficent number of emails more pretty. Later I also need to sort the user question (i.e. ouath2).
+
+On making it more pretty I need someone else's way of making it look like Pocket
+
+What are the criteria?
+How should it be stored? A series of queries? That then adds each email ID to the DB? And ensure there are no duplicates.
+
+pseudocode
+make a new session with a timestamp, log that in the database
+for query in queries
+  give me email message ids
+store the message ids in the database
+  if there's a duplicate, skip it
+for each message id, store the html
+for a session id make an html file/field
+  for each bit of html that matches that session id, append the html for that message to the end of the field
+
+model:
+  timestamp created
+  session number
+  query number (?)
+  gmail message id
+  message html
+
+#### TO DO TO DO
+- Split script into scripts to make it usable
+- Do the stuff above
+
+## 17 June
+09:30 (or earlier)
+
+Input should include 'paste a URL'.
+
+
+
+
+
+
+
+------------------------
+Putting here for safe storage:
+
+  def get_events():
+      r = requests.get('http://www.lse.ac.uk/Events/Search-Events')
+      soup = BeautifulSoup(r.text, 'html.parser')
+      event_results = soup.find(class_='largeList').get_text()
+      with open(filename, 'w', encoding="utf-8") as outfile:
+          outfile.write(event_results)
+      print ('Events saved.')
+      # events =
+      # for e in events:
+      # also put in the html2text
+
+  def plain_text_parser():
+      pass
+      #html2text goes here
