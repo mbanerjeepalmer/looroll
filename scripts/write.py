@@ -1,6 +1,5 @@
 """Take stuff and read or write it to or from the database."""
 import django
-import os
 from loorollv2app.models import Roll
 
 
@@ -10,6 +9,7 @@ def append_html(mimedocument, filename):
         html = mimedocument.get_body().get_content()
         # TODO Write to DB
         with open(filename, 'a', encoding="utf-8") as f:
+            #TODO Tidy.
             f.write('\n')
             f.write(html)
             f.write('\n')

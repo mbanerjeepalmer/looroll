@@ -3,17 +3,17 @@ from apiclient import discovery
 from oauth2client import file, client, tools
 from httplib2 import Http
 import base64
-
+import os
 
 def gmail_setup():
     """Return a Gmail instance."""
     SCOPES = 'https://www.googleapis.com/auth/gmail.modify'
-    store = file.Storage('.\\secrets\\storage.json')
+    store = file.Storage(os.path.abspath('.\\secrets\\storage.json'))
     creds = store.get()
     if not creds or creds.invalid:
         # TODO I don't believe this fully works.
         # At the moment I need to delete 'storage.json' to trigger this flow.
-        flow = client.flow_from_clientsecrets('.\\secrets\\client_secret.json', SCOPES)
+        flow = client.flow_from_clientsecrets(os.path.abspath('.\\secrets\\client_secret.json'), SCOPES)
         creds = tools.run_flow(flow, store)
     return discovery.build('gmail', 'v1', http=creds.authorize(Http()))
 

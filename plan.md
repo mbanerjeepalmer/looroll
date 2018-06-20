@@ -32,6 +32,10 @@
 - https://simpleisbetterthancomplex.com/tutorial/2016/06/27/how-to-use-djangos-built-in-login-system.html (sort of)
 
 
+**Prettification and conversion**
+- https://github.com/thespacedoctor/polyglot
+
+
 # Diary
 ## 3 June
 Got started. Took ages.
@@ -99,13 +103,26 @@ model:
 
 ## 17 June
 09:30 (or earlier)
-
+Notes
 Input should include 'paste a URL'.
 
+Finish:
+22:10
+Big day. Not loads achieved.
+Perhaps I should set a pomodoro style reminder to note progress every half hour.
 
+Finished with the following message `OSError: [Errno 101] Network is unreachable`
+Feels like time to shift to Heroku (or digital ocean?). Either that or work out how to make Gmail API client work via a proxy.
 
+It did work earlier though, which is weird.
 
+## TO DO
+Error handling.
+Absolute versus relative paths.
+Line splits are a bit concerning...
+And then the rest of the TODOs.
 
+## 20 June
 
 
 ------------------------
