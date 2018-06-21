@@ -124,6 +124,9 @@ And then the rest of the TODOs.
 
 ## 20 June
 
+## 21 June
+- Didn't do anything about static files: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Deployment#Serving_static_files_in_production
+
 
 ------------------------
 Putting here for safe storage:
