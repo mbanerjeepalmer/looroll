@@ -29,7 +29,11 @@ SECRET_KEY = 'uyt#c8msu!ndqa43od6_15*pd5lob&+dj39($ei7bmjksk(u8j'
 # DEBUG = True
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = ['cachaoonpython.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'cachaoonpython.pythonanywhere.com',
+    'localhost', '127.0.0.1',
+    'loorolls.herokuapp.com'
+]
 
 
 # Application definition
