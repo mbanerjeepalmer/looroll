@@ -36,7 +36,7 @@ def server_oauth(authorization_response):
 
 def refresh_access_token(token):
     #TODO change to https://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#third-recommended-define-automatic-token-refresh-and-update
-    extra = {'client_id' : client_id, 'client_secret' : client_secret}
+    extra = {'client_id': client_id, 'client_secret': client_secret}
     client = OAuth2Session(client_id,scope=scope,redirect_uri=redirect_uri, token=token) # TODO Work out what to do about long lines...
     token = client.refresh_token(token_url, **extra)
     return token, client

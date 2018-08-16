@@ -11,6 +11,14 @@ from scripts import convert, gmail_access, write
 import ast
 
 user = os.environ['TEST_EMAIL_ADDRESS']
+token = {
+    'access_token': 'os.environ['GOOGLE_TOKEN_ACCESS']',
+    'token_type': 'Bearer',
+    'expires_in': 3600,
+    'refresh_token': os.environ['GOOGLE_REFRESH_TOKEN'],
+    'scope': ['https://www.googleapis.com/auth/gmail.modify'],
+    'expires_at': 1533628462.5902889
+}
 
 #
 #
@@ -90,8 +98,8 @@ user = os.environ['TEST_EMAIL_ADDRESS']
 # - Where is it being stored
 
 
-def main():
-    token, client = gmail_access.refresh_access_token(ast.literal_eval(os.environ['GOOGLE_FULL_TOKEN']))
+def main(token):
+    token, client = gmail_access.refresh_access_token(token)
     msg_ids = gmail_access.gmail_query(client, user, 'newer_than:1d label:looroll')
     for msg_id in msg_ids:
         mimedocument = gmail_access.get_email_body(client, user, msg_id)
@@ -100,4 +108,4 @@ def main():
     print ('Done')
 
 if __name__ == "__main__":
-    main()
+    main(token)
