@@ -9,3 +9,4 @@ secrets/
 joinedemails/
 loorollenv/
 *.md
+.vscode/

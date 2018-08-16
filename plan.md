@@ -26,14 +26,36 @@
 - https://jeffknupp.com/blog/2013/12/18/starting-a-django-16-project-the-right-way/
 - https://medium.com/@djstein/modern-django-part-0-introduction-and-initial-setup-657df48f08f8 (haven't read)
 
-**Authentication**
+## Books
+- https://books.agiliq.com/en/latest/
+
+### Authentication
 - https://wsvincent.com/django-user-authentication-tutorial-login-and-logout/
 - https://docs.djangoproject.com/en/2.0/topics/auth/default/#module-django.contrib.auth.views
 - https://simpleisbetterthancomplex.com/tutorial/2016/06/27/how-to-use-djangos-built-in-login-system.html (sort of)
 
+### OAuth
+For the deprecated client
+- https://developers.google.com/api-client-library/python/auth/web-app
+- https://developers.google.com/api-client-library/python/guide/django
+- https://developers.google.com/api-client-library/python/guide/aaa_oauth#OAuth2WebServerFlow
+- https://github.com/google/oauth2client/tree/master/samples/django
 
-**Prettification and conversion**
+New options
+- http://google-auth-oauthlib.readthedocs.io/en/latest/
+- https://requests-oauthlib.readthedocs.io/en/latest/
+- Errr https://github.com/jazzband/django-oauth-toolkit
+- http://media.readthedocs.org/pdf/python-social-auth/latest/python-social-auth.pdf
+- https://goodcode.io/static/media/OAuth2-edited.pdf
+- https://gist.github.com/ib-lundgren/6507798
+
+Safe keeping
+- https://gist.github.com/EugeneLiang/4bde544cd9b572142a62#file-apiauth-py
+
+## Tools
+### Prettification and conversion
 - https://github.com/thespacedoctor/polyglot
+- https://pandoc.org
 
 
 # Diary
@@ -128,6 +150,113 @@ And then the rest of the TODOs.
 - Didn't do anything about static files: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Deployment#Serving_static_files_in_production
 Lost access to looroll heroku
 
+
+## 26 June
+- It's fucking deprecated! https://oauth2client.readthedocs.io/en/latest/index.html
+- Use google-auth and/or  authlub instead?!
+
+### 2-3 July
+- Tried requests-oauthlib but now on python-social-auth
+
+10:20 3 July
+- Done most settings changes I think.
+- Looks like the URLs will autoresolve to /login ?
+  - Turns out it needed `from django.contrib.auth import views` in the main urls.py
+
+### 5 July
+- These two tutorials were for a different version to the one I'm using...
+  - https://simpleisbetterthancomplex.com/tutorial/2016/10/24/how-to-add-social-login-to-django.html
+  - https://fosstack.com/how-to-add-google-authentication-in-django/
+
+### 4 August
+- OAuth2
+  - !(2018-08-04 22:09)
+      - Get the access token
+          - Follow the correct steps for Django. Certainly by looking at GitHub or something.
+          - As a minimum I'm more comfortable with the constituent steps
+      - Use it to access protected resources
+          - Requests library as normal? Grab the `access_token` from the DB?
+          - The docs are suggesting no, use the object instead...
+          - Success: add it as a header.
+      - Refresh token
+          - Specified here: https://developers.google.com/identity/protocols/OAuth2WebServer
+          - Probably. Only if I look at the HTTP version.
+
+### 5 August
+-
+-
+
+### 7 August
+- TODO
+  - **Step 4: Handle the OAuth 2.0 server response:** Carefully consider whether you want to send authorization credentials to all resources on that page (especially third-party scripts such as social plugins and analytics). To avoid this issue, we recommend that the server first handle the request, then redirect to another URL that doesn't include the response parameters.
+- Sort out refresh token
+  - Got one this morning
+  - Use it now (Success: 22:39)
+
+-TODO
+  - Rewrite everything that interacts with Gmail
+    - Rewritten access (Success: 23:48)
+    - TODO Rewrite query
+  - TODO Get the rest of Django OAuth working.
+    - Note the 'Server response' thing above
+    - ORM
+  - TODO Set this up for users
+    - User creates account
+    - User links that account to Google account
+    - Application grabs and sends specific emails to user
+      - Which emails?
+        - User chooses
+        - Looks useful to filter once chosen https://developers.google.com/gmail/api/guides/filter_settings
+      - How to grab and send?
+        - Schedule script on Heroku
+          - For loop for each user?
+        - Sending is email plus site (behind login page)
+          - Email not too tricky
+          - Site need to make sure adding to DB and then displaying in view works properly
+
+
+### 8 August
+- What's the Django side of this? (Most of what's noted above relates to the Gmail API side)
+  - I suppose the flow is:
+    (1) Login page
+      View supplies the auth url to the user
+        View generates the URL using requests-oauthlib OAuthSession from the gmail-access module
+        View passes that url to the template in a context dict
+      Template displays it
+        Template displays the authorisation URL if the user is logged in
+    (2) Callback page
+      View and template exist to be redirected to
+        The URL is registered with Google
+        The template may or may not be necessary, depending on whether the user stays there or not.
+      View pulls in the URL from the page
+        Is this a separate view? Or can I differentiate based on GET / POST?
+        View grabs URL the user is on and stores in a variable
+      View uses the response URL to send the request to the server, fetch the tokens and save them to the DB.
+        View uses the OAuthSession client to fetch the tokens in the background
+        View has access to the User model in the DB and saves the fields of the token (access, refresh, expires etc.) in columns
+      Redirect to another page maybe?
+        Is this necessary? Or just say 'Go to home to see today's loo roll'.
+
+TODO  Template + View for standard auth
+        See Rango
+TODO How does it handle state?
+TODO (long grass): remove the need for standard Django login altogether. Something like django simple social auth might provide guidance on how to do so.
+
+### 11 August
+- Sort of worked out the view.
+  - But HTTPS is going to be necessary
+  - Look for an example
+- User model
+
+### 14 August
+- Change of plan: do something minimal for the moment so I'm actually getting this
+  - Use plain auth token etc. from Gmail Access module
+  - Sort proper auth and DB (i.e. other users) later
+- How would I do this?
+- TODO
+  - Saving HTML string to Django DB
+    - Ensure it's being appended
+  - Push to Heroku and survey the damage...
 
 ------------------------
 Putting here for safe storage:
