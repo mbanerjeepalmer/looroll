@@ -12,7 +12,7 @@ import ast
 
 user = os.environ['TEST_EMAIL_ADDRESS']
 token = {
-    'access_token': os.environ['GOOGLE_TOKEN_ACCESS'],
+    'access_token': '',
     'token_type': 'Bearer',
     'expires_in': 3600,
     'refresh_token': os.environ['GOOGLE_REFRESH_TOKEN'],
