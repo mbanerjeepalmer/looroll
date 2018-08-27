@@ -17,7 +17,6 @@ token_url = 'https://www.googleapis.com/oauth2/v4/token'
 @login_required
 def roll(request):
     html = Roll.objects.latest(field_name='created_date').html_string
-    # html = "<html><body>Imagine this was a huge email.</body></html>"
     return HttpResponse(html)
 
 

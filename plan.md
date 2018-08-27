@@ -33,6 +33,7 @@
 - https://wsvincent.com/django-user-authentication-tutorial-login-and-logout/
 - https://docs.djangoproject.com/en/2.0/topics/auth/default/#module-django.contrib.auth.views
 - https://simpleisbetterthancomplex.com/tutorial/2016/06/27/how-to-use-djangos-built-in-login-system.html (sort of)
+- https://djangobook.com/user-authentication-django/
 
 ### OAuth
 For the deprecated client
@@ -258,9 +259,47 @@ TODO (long grass): remove the need for standard Django login altogether. Somethi
     - Ensure it's being appended
   - Push to Heroku and survey the damage...
 
+
+### 18 August
+- We are cooking! It works. I can:
+  - Ask Heroku to run `script.py` and this will grab the emails with the 'looroll' label received within the last day and display them as one huge block of HTML.
+- On the pseudo roadmap
+  - Users/auth
+    - It's not clear that this works *at all* to be honest. I can't get in on mobile.
+    - OAuth2 wise, I need to set up HTTPS.
+  - Prettification
+    - Pandoc via Python
+    - Any other options? Like Firefox and other readability options.
+  - Sourcing
+    - Inbox analytics
+    - Set filters, whether from analytics or manually
+  - Further functionality
+    - Pocket API
+    -
+- So:
+  (1) Auth
+  (2) Set filters
+  (3) Everything else
+Auth: Makes sense to kill two birds with one stone and finish the Django tutorial again.
+
+### 26 August
+- Finally got through the official tutorial again. And then spent half an hour on an auth tutorial.
+
+TODO
+- Get through the rest of the other auth tutorial.
+- Get back to building. Plus maybe build the spotify thing.
+- Within (3) above, one big thing might be SSL.
+
+### 27 August
+- Get through the rest of the other auth tutorial.
+  - Done that sort of. Although there isn't a registration thing at the moment...
+- Get back to building. Plus maybe build the spotify thing.
+- Within (3) above, one big thing might be SSL.
+
+
 ------------------------
 Putting here for safe storage:
-
+```python
   def get_events():
       r = requests.get('http://www.lse.ac.uk/Events/Search-Events')
       soup = BeautifulSoup(r.text, 'html.parser')
@@ -275,3 +314,4 @@ Putting here for safe storage:
   def plain_text_parser():
       pass
       #html2text goes here
+```
