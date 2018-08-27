@@ -2,13 +2,13 @@
 # !/usr/bin/python3.6
 # TODO decide whether shebang is necessary
 import os
-#TODO See if I can move this elsewhere.
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "loorollv2.settings")
 import django
+from scripts import gmail_access, write
+
+
+# TODO See if I can move this elsewhere.
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "loorollv2.settings.local")
 django.setup()
-import datetime
-from scripts import convert, gmail_access, write
-import ast
 
 user = os.environ['TEST_EMAIL_ADDRESS']
 token = {
