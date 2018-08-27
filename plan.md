@@ -37,7 +37,9 @@
 
 ### SSL/HTTPS
 - https://www.petercuret.com/how-ssl-encrypt-your-django-heroku-projects-free-lets-encrypt/
-- 
+- https://chase-seibert.github.io/blog/2012/04/13/djangoheroku-quickstart-for-existing-applications.html
+- https://www.codingforentrepreneurs.com/blog/ssltls-settings-for-django/
+-
 
 ### OAuth
 For the deprecated client
@@ -301,7 +303,9 @@ TODO
 - Within (3) above, one big thing might be SSL.
 
 Doing
--
+- SSL: Yet again, something which to me seems incredibly complicated turns out to be simple. One line in `settings.py`
+  - TODO split settings
+  - TODO
 
 ------------------------
 Putting here for safe storage:
