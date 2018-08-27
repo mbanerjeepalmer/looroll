@@ -32,6 +32,7 @@ def login(request):
 
 def callback(request):
     client_id = os.environ['GOOGLE_CLIENT_ID']
+    client_secret = os.environ['GOOGLE_CLIENT_SECRET']
     authorization_response = request.build_absolute_uri()
     client = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
     token = client.fetch_token('https://accounts.google.com/o/oauth2/token', authorization_response=authorization_response, client_secret=client_secret)
