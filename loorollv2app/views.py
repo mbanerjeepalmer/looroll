@@ -10,8 +10,7 @@ redirect_uri = 'https://loorolls.herokuapp.com/rolls/callback/'
 authorization_base_url = 'https://accounts.google.com/o/oauth2/v2/auth'
 access_type = 'offline'
 prompt = 'select_account'
-token_url = 'https://www.googleapis.com/oauth2/v4/token
-client_id =
+token_url = 'https://www.googleapis.com/oauth2/v4/token'
 
 @login_required
 def roll(request):
