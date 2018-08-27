@@ -35,6 +35,10 @@
 - https://simpleisbetterthancomplex.com/tutorial/2016/06/27/how-to-use-djangos-built-in-login-system.html (sort of)
 - https://djangobook.com/user-authentication-django/
 
+### SSL/HTTPS
+- https://www.petercuret.com/how-ssl-encrypt-your-django-heroku-projects-free-lets-encrypt/
+- 
+
 ### OAuth
 For the deprecated client
 - https://developers.google.com/api-client-library/python/auth/web-app
@@ -296,6 +300,8 @@ TODO
 - Get back to building. Plus maybe build the spotify thing.
 - Within (3) above, one big thing might be SSL.
 
+Doing
+-
 
 ------------------------
 Putting here for safe storage:
