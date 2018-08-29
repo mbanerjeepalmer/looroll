@@ -48,4 +48,4 @@ def callback(request):
     except Exception as e:
         #TODO this is bad
         error_message = str(e) + traceback.format_exc()
-        HttpResponse(error_message)
+        return HttpResponse(error_message)
