@@ -6,7 +6,7 @@ from requests_oauthlib import OAuth2Session
 import os
 
 scope = 'https://www.googleapis.com/auth/gmail.modify'
-redirect_uri = 'https://127.0.0.1:8000/rolls/callback/'
+redirect_uri = 'https://loorolls.herokuapp.com/rolls/callback/'
 authorization_base_url = 'https://accounts.google.com/o/oauth2/v2/auth'
 access_type = 'offline'
 prompt = 'consent'
@@ -34,6 +34,7 @@ def login(request):
 
 
 def callback(request):
+    # TODO this whole thing is a bit messy and doesn't check state
     user = request.user
     client_id = os.environ['GOOGLE_CLIENT_ID']
     client_secret = os.environ['GOOGLE_CLIENT_SECRET']
@@ -41,4 +42,4 @@ def callback(request):
     client = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
     token = client.fetch_token('https://accounts.google.com/o/oauth2/token', authorization_response=authorization_response, client_secret=client_secret)
     UserProfile.objects.update_or_create(defaults=token, user=user)
-    redirect(reverse('login')) # TODO Check refresh token in response and change prompt to 'consent' if not. Right now I'm just hardcoding consent. Plus this redicrect is probably bad.
+    redirect(reverse('login'))  # TODO Check refresh token in response and change prompt to 'consent' if not. Right now I'm just hardcoding consent. Plus this redicrect is probably bad.
