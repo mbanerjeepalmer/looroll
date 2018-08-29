@@ -2,13 +2,13 @@
 # !/usr/bin/python3.6
 # TODO decide whether shebang is necessary
 import os
-import django
-from scripts import gmail_access, write
 
 
 # TODO See if I can move this elsewhere.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "loorollv2.settings.local")
+import django
 django.setup()
+from scripts import gmail_access, write
 
 user = os.environ['TEST_EMAIL_ADDRESS']
 token = {
@@ -100,12 +100,13 @@ token = {
 
 def main(token):
     token, client = gmail_access.refresh_access_token(token)
-    msg_ids = gmail_access.gmail_query(client, user, 'newer_than:1d label:looroll')
+    msg_ids = gmail_access.gmail_query(client, user, 'newer_than:1d category:promotions OR label:looroll')
     for msg_id in msg_ids:
         mimedocument = gmail_access.get_email_body(client, user, msg_id)
         write.html_to_db(mimedocument)
         print(msg_id)
     print ('Done')
+
 
 if __name__ == "__main__":
     main(token)
