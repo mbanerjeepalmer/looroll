@@ -45,6 +45,7 @@ def callback(request):
         token = client.fetch_token('https://accounts.google.com/o/oauth2/token', authorization_response=authorization_response, client_secret=client_secret)
         UserProfile.objects.update_or_create(defaults=token, user=user)
         redirect(reverse('login'))  # TODO Check refresh token in response and change prompt to 'consent' if not. Right now I'm just hardcoding consent. Plus this redicrect is probably bad.
-    except Error as e:
+    except Exception as e:
+        #TODO this is bad
         error_message = str(e) + traceback.format_exc()
         HttpResponse(error_message)
