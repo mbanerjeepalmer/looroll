@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from requests_oauthlib import OAuth2Session
 import os
+import traceback
 
 scope = 'https://www.googleapis.com/auth/gmail.modify'
 redirect_uri = 'https://loorolls.herokuapp.com/rolls/callback/'
@@ -35,11 +36,15 @@ def login(request):
 
 def callback(request):
     # TODO this whole thing is a bit messy and doesn't check state
-    user = request.user
-    client_id = os.environ['GOOGLE_CLIENT_ID']
-    client_secret = os.environ['GOOGLE_CLIENT_SECRET']
-    authorization_response = request.build_absolute_uri()
-    client = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
-    token = client.fetch_token('https://accounts.google.com/o/oauth2/token', authorization_response=authorization_response, client_secret=client_secret)
-    UserProfile.objects.update_or_create(defaults=token, user=user)
-    redirect(reverse('login'))  # TODO Check refresh token in response and change prompt to 'consent' if not. Right now I'm just hardcoding consent. Plus this redicrect is probably bad.
+    try:
+        user = request.user
+        client_id = os.environ['GOOGLE_CLIENT_ID']
+        client_secret = os.environ['GOOGLE_CLIENT_SECRET']
+        authorization_response = request.build_absolute_uri()
+        client = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
+        token = client.fetch_token('https://accounts.google.com/o/oauth2/token', authorization_response=authorization_response, client_secret=client_secret)
+        UserProfile.objects.update_or_create(defaults=token, user=user)
+        redirect(reverse('login'))  # TODO Check refresh token in response and change prompt to 'consent' if not. Right now I'm just hardcoding consent. Plus this redicrect is probably bad.
+    except Error as e:
+        error_message = str(e) + traceback.format_exc()
+        HttpResponse(error_message)
