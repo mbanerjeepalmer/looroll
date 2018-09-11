@@ -3,12 +3,12 @@ from django.contrib.auth.models import User
 import datetime
 
 class Roll(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True) # TODO I think the the null=true is wrong because every UserProfile needs a user...
     created_date = models.DateTimeField(auto_now_add=True)
     html_string = models.TextField()
 
     def __str__(self):
         return str(self.created_date)
-
 
 # TODO
 # class Sheet(models.Model):
@@ -17,9 +17,8 @@ class Roll(models.Model):
 #     other deets
 #     most importantly just make Roll an aggregation of these things with a relationship of some sort
 
-
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True) #TODO I think the the null=true is wrong because every UserProfile needs a user...
     access_token = models.CharField(max_length=255, blank=True)
     token_type = models.CharField(max_length=255, blank=True)
     expires_at = models.FloatField(blank=True)

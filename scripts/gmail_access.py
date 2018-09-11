@@ -3,10 +3,9 @@ import base64
 import os
 from requests_oauthlib import OAuth2Session
 # TODO from oauthlib.oauth2 import TokenExpiredError
-import requests
 import email
 
-
+# TODO Obviously...
 client_secret = os.environ['GOOGLE_CLIENT_SECRET']
 client_id = os.environ['GOOGLE_CLIENT_ID']
 
@@ -36,10 +35,11 @@ def server_oauth(authorization_response):
 
 def refresh_access_token(token):
     #TODO change to https://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#third-recommended-define-automatic-token-refresh-and-update
-    extra = {'client_id': client_id, 'client_secret': client_secret}
-    client = OAuth2Session(client_id,scope=scope,redirect_uri=redirect_uri, token=token) # TODO Work out what to do about long lines...
-    token = client.refresh_token(token_url, **extra)
-    return token, client
+    #extra = {'client_id': client_id, 'client_secret': client_secret}
+    refresh_token = token.pop('refresh_token')
+    client = OAuth2Session(client_id)
+    token = client.refresh_token(token_url, refresh_token=refresh_token, client_id=client_id, client_secret=client_secret)
+    return client
 
 def test_request(client):
     protected_url = 'https://www.googleapis.com/gmail/v1/users/mbanerjeepalmer@gmail.com/messages'

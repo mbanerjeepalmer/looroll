@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from requests_oauthlib import OAuth2Session
 import os
 import traceback
+from django.core.exceptions import ObjectDoesNotExist
 
 scope = 'https://www.googleapis.com/auth/gmail.modify'
 redirect_uri = 'https://loorolls.herokuapp.com/rolls/callback/'
@@ -16,16 +17,19 @@ token_url = 'https://www.googleapis.com/oauth2/v4/token'
 
 @login_required
 def roll(request):
-    html = Roll.objects.latest(field_name='created_date').html_string
-    return HttpResponse(html)
+    user = request.user
+    try:
+        # TODO obviously need to be storing these separately and then displaying then showing each in an iframe
+        # But ultimately I should also be formatting each one so the iframe isn't necessary
+        html = Roll.objects.filter(user=user).latest(field_name='created_date').html_string
+        return HttpResponse(html)
+    except ObjectDoesNotExist:
+        return HttpResponse("You don't have any loo roll")
 
-
-@login_required
-def home(request):
-    return HttpResponse(request.user)
 
 @login_required
 def login(request):
+    # TODO merge this with the built in login view
     client_id = os.environ['GOOGLE_CLIENT_ID']
     client_secret = os.environ['GOOGLE_CLIENT_SECRET']
     client = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
