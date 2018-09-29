@@ -10,4 +10,5 @@ joinedemails/
 loorollenv/
 *.md
 .vscode/
-.sublime-project
+*.sublime-project
+*.sublime-workspace

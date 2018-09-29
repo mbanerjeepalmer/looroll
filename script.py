@@ -33,7 +33,7 @@ def main():
         msg_ids = gmail_access.gmail_query(client, 'me', 'newer_than:1d category:promotions OR label:looroll')
         for msg_id in msg_ids:
             mimedocument = gmail_access.get_email_body(client, 'me', msg_id)
-            today_roll = today_or_create_roll(profile.user)
+            today_roll = write.today_or_create_roll(profile.user)
             write.html_to_roll(mimedocument, today_roll, profile.user)
             print(msg_id)
         print ('Done')
