@@ -16,21 +16,23 @@ def append_html(mimedocument, filename):
             f.write('\n')
     except Exception as exception:
         # TODO logging etc. needs fixing.
-        # In past versions it used the apiclient errors
         print('Fuck. ' + str(exception))
 
-def today_or_create_roll(user):
+def today_or_new_roll(user):
     django.setup()
-    today_roll = Roll.objects.filter(user=user).latest(field_name='created_date')
-    if not today_roll:
-         # TODO handle empty using .exists()
-    # except ObjectDoesNotExist:
-        t = Roll(html_string='', user=user)
-        t.save()
-    if today_roll.created_date.date() != datetime.date.today():
-        t = Roll(html_string='', user=user)
-        t.save()
-    return today_roll
+    existing_roll = Roll.objects.filter(user=user).latest(field_name='created_date')
+    if not existing_roll:
+        # TODO handle empty using .exists()
+        # and/or except ObjectDoesNotExist
+        new_roll = Roll(html_string='', user=user)
+        new_roll.save()
+        return new_roll
+    elif existing_roll.created_date.date() != datetime.date.today():
+        new_roll = Roll(html_string='', user=user)
+        new_roll.save()
+        return new_roll
+    else:
+        return existing_roll
    
 
 def html_to_roll(mimedocument, roll, user):

@@ -32,8 +32,11 @@ def main():
         client = gmail_access.refresh_access_token(token)
         msg_ids = gmail_access.gmail_query(client, 'me', 'newer_than:1d category:promotions OR label:looroll')
         for msg_id in msg_ids:
+            # Runs for all users
+            # Runs once per day
+            # Runs without error handling
             mimedocument = gmail_access.get_email_body(client, 'me', msg_id)
-            today_roll = write.today_or_create_roll(profile.user)
+            today_roll = write.today_or_new_roll(profile.user)
             write.html_to_roll(mimedocument, today_roll, profile.user)
             print(msg_id)
         print ('Done')
