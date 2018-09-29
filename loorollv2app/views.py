@@ -24,7 +24,7 @@ def roll(request):
         html = Roll.objects.filter(user=user).latest(field_name='created_date').html_string
         return HttpResponse(html)
     except ObjectDoesNotExist:
-        return HttpResponse("You don't have any loo roll")
+        return HttpResponse("You've run out of loo roll (if you had any in the first place).")
 
 
 @login_required
@@ -33,13 +33,13 @@ def login(request):
     client_id = os.environ['GOOGLE_CLIENT_ID']
     client_secret = os.environ['GOOGLE_CLIENT_SECRET']
     client = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
-    authorization_url, state = client.authorization_url(authorization_base_url, access_type='offline', prompt='select_account')
+    authorization_url, state = client.authorization_url(authorization_base_url, access_type='offline', prompt='consent')
     context_dict = {'authorization_url': authorization_url}
     return render(request, 'registration/login.html', context_dict)
 
-
+@login_required
 def callback(request):
-    # TODO this whole thing is a bit messy and doesn't check state
+    # TODO this whole thing is a bit messy and doesn't check state etc.
     try:
         user = request.user
         client_id = os.environ['GOOGLE_CLIENT_ID']
@@ -47,8 +47,10 @@ def callback(request):
         authorization_response = request.build_absolute_uri()
         client = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
         token = client.fetch_token('https://accounts.google.com/o/oauth2/token', authorization_response=authorization_response, client_secret=client_secret)
-        UserProfile.objects.update_or_create(defaults=token, user=user)
-        return redirect('https://loorolls.herokuapp.com/rolls/')  # TODO Check refresh token in response and change prompt to 'consent' if not. Right now I'm just hardcoding consent. Plus this redicrect is probably bad.
+        UserProfile.objects.update_or_create(defaults=token, user=user) 
+        # TODO there is no way of ensuring the Django email login is the same as the Google one
+        # Either eliminate Django login altogether, or make it clearer which email address is used
+        return redirect('https://loorolls.herokuapp.com/rolls/')  # TODO Check refresh token in response and change prompt to 'consent' if not. Right now I'm just hardcoding consent. Plus this redirect is probably bad.
     except Exception as e:
         #TODO this is bad
         error_message = str(e) + traceback.format_exc()

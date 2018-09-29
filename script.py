@@ -1,6 +1,7 @@
 """Pull together the different functions etc and execute."""
 import os
 import pdb
+import traceback
 
 
 # TODO See if I can move this elsewhere.
@@ -23,23 +24,26 @@ from loorollv2app.models import UserProfile
 
 def main():
     user_profiles = UserProfile.objects.all()
-    for profile in user_profiles:
-        # pdb.set_trace()
-        token = profile.__dict__
-        # del token['id'], token['user_id'], token['_state'], token['access_token'], token['token_type'], token['expires_at'], token['expires_in']
-        token['client_secret'] = os.environ['GOOGLE_CLIENT_SECRET']
-        token['client_id'] = os.environ['GOOGLE_CLIENT_ID']
-        client = gmail_access.refresh_access_token(token)
-        msg_ids = gmail_access.gmail_query(client, 'me', 'newer_than:1d category:promotions OR label:looroll')
-        for msg_id in msg_ids:
-            # Runs for all users
-            # Runs once per day
-            # Runs without error handling
-            mimedocument = gmail_access.get_email_body(client, 'me', msg_id)
-            today_roll = write.today_or_new_roll(profile.user)
-            write.html_to_roll(mimedocument, today_roll, profile.user)
-            print(msg_id)
-        print ('Done')
+    try:
+        for profile in user_profiles:
+            # pdb.set_trace()
+            token = profile.__dict__
+            # del token['id'], token['user_id'], token['_state'], token['access_token'], token['token_type'], token['expires_at'], token['expires_in']
+            token['client_secret'] = os.environ['GOOGLE_CLIENT_SECRET']
+            token['client_id'] = os.environ['GOOGLE_CLIENT_ID']
+            client = gmail_access.refresh_access_token(token)
+            msg_ids = gmail_access.gmail_query(client, 'me', 'newer_than:1d category:promotions OR label:looroll')
+            for msg_id in msg_ids:
+                # Runs for all users
+                # Runs once per day
+                # Runs without error handling
+                mimedocument = gmail_access.get_email_body(client, 'me', msg_id)
+                today_roll = write.today_or_new_roll(profile.user)
+                write.html_to_roll(mimedocument, today_roll, profile.user)
+                print(msg_id)
+            print ('Done')
+    except Exception as e:
+        print(e)
 
 
 if __name__ == "__main__":
