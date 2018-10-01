@@ -24,9 +24,9 @@ from loorollv2app.models import UserProfile
 
 def main():
     user_profiles = UserProfile.objects.all()
-    try:
-        for profile in user_profiles:
-            # pdb.set_trace()
+    for profile in user_profiles:
+        try: 
+        # pdb.set_trace()
             token = profile.__dict__
             # del token['id'], token['user_id'], token['_state'], token['access_token'], token['token_type'], token['expires_at'], token['expires_in']
             token['client_secret'] = os.environ['GOOGLE_CLIENT_SECRET']
@@ -42,9 +42,8 @@ def main():
                 write.html_to_roll(mimedocument, today_roll, profile.user)
                 print(msg_id)
             print ('Done')
-    except Exception as e:
-        print(e)
-
+        except Exception as e:
+            print(e)
 
 if __name__ == "__main__":
     main()
