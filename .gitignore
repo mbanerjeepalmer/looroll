@@ -12,3 +12,4 @@ loorollenv/
 .vscode/
 *.sublime-project
 *.sublime-workspace
+experiments/
