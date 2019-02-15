@@ -27,8 +27,7 @@ def main():
     for profile in user_profiles:
         try: 
         # pdb.set_trace()
-            token = profile.__dict__
-            # del token['id'], token['user_id'], token['_state'], token['access_token'], token['token_type'], token['expires_at'], token['expires_in']
+            token = profile.__dict__.copy()
             token['client_secret'] = os.environ['GOOGLE_CLIENT_SECRET']
             token['client_id'] = os.environ['GOOGLE_CLIENT_ID']
             client = gmail_access.refresh_access_token(token)
@@ -38,8 +37,7 @@ def main():
                 # Runs once per day
                 # Runs without error handling
                 mimedocument = gmail_access.get_email_body(client, 'me', msg_id)
-                today_roll = write.today_or_new_roll(profile.user)
-                write.html_to_roll(mimedocument, today_roll, profile.user)
+                write.html_to_sheet(profile.user, msg_id, mimedocument)
                 print(msg_id)
             print ('Done')
         except Exception as e:

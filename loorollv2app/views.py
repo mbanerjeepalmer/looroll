@@ -8,11 +8,15 @@ import traceback
 from django.core.exceptions import ObjectDoesNotExist
 
 scope = 'https://www.googleapis.com/auth/gmail.modify'
-redirect_uri = 'https://loorolls.herokuapp.com/rolls/callback/'
+redirect_uri = 'https://http://127.0.0.1:8000/callback/'
 authorization_base_url = 'https://accounts.google.com/o/oauth2/v2/auth'
 access_type = 'offline'
 prompt = 'consent'
 token_url = 'https://www.googleapis.com/oauth2/v4/token'
+
+if 'HEROKU' not in os.environ:
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+    redirect_uri = 'http://127.0.0.1:8000/rolls/callback/'
 
 
 @login_required
@@ -26,6 +30,11 @@ def roll(request):
     except ObjectDoesNotExist:
         return HttpResponse("You've run out of loo roll (if you had any in the first place).")
 
+@login_required
+def sheet(request):
+    try:
+        # get by ID for test purposes
+
 
 @login_required
 def login(request):
@@ -33,7 +42,7 @@ def login(request):
     client_id = os.environ['GOOGLE_CLIENT_ID']
     client_secret = os.environ['GOOGLE_CLIENT_SECRET']
     client = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
-    authorization_url, state = client.authorization_url(authorization_base_url, access_type='offline', prompt='consent')
+    authorization_url, state = client.authorization_url(authorization_base_url, access_type='offline', prompt='select_account')
     context_dict = {'authorization_url': authorization_url}
     return render(request, 'registration/login.html', context_dict)
 

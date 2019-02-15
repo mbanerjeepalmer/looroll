@@ -1,6 +1,6 @@
 """Take stuff and read or write it to or from the database."""
 import django
-from loorollv2app.models import Roll
+from loorollv2app.models import Roll, Sheet
 import datetime
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -47,3 +47,27 @@ def html_to_roll(mimedocument, roll, user):
     today_roll = Roll.objects.filter(user=user).latest(field_name='created_date')
     today_roll.html_string += html
     today_roll.save()
+
+
+def new_sheet(user):
+    django.setup()
+    
+    if not existing_roll:
+        # TODO handle empty using .exists()
+        # and/or except ObjectDoesNotExist
+        new_roll = Roll(html_string='', user=user)
+        new_roll.save()
+        return new_roll
+    elif existing_roll.created_date.date() != datetime.date.today():
+        new_roll = Roll(html_string='', user=user)
+        new_roll.save()
+        return new_roll
+    else:
+        return existing_roll
+   
+
+def html_to_sheet(user, gmail_id, mimedocument):
+    html = mimedocument.get_body().get_content()
+    django.setup()
+    s = Sheet(user=user, gmail_id=gmail_id, html_string=html)
+    s.save()
