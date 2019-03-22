@@ -42,7 +42,6 @@ def refresh_access_token(token):
     return client
 
 def test_request(client):
-    protected_url = 'https://www.googleapis.com/gmail/v1/users/mbanerjeepalmer@gmail.com/messages'
     r = client.get(protected_url)
     return r.status_code
 
