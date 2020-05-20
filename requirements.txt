@@ -21,7 +21,7 @@ google-api-python-client==1.6.4
 google-auth==1.5.0
 gunicorn==19.8.1
 html2text==2018.1.9
-httplib2==0.10.3
+httplib2==0.18.0
 idna==2.6
 imagesize==1.0.0
 isort==4.3.4
