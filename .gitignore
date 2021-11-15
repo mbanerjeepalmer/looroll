@@ -6,7 +6,8 @@ db.sqlite3
 .DS_Store
 secrets/
 joinedemails/
-loorollenv/*
+loorollenv
+venv
 *.md
 .vscode/
 *.sublime-project

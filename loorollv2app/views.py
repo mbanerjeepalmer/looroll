@@ -30,11 +30,6 @@ def roll(request):
     except ObjectDoesNotExist:
         return HttpResponse("You've run out of loo roll (if you had any in the first place).")
 
-@login_required
-def sheet(request):
-    try:
-        # get by ID for test purposes
-
 
 @login_required
 def login(request):
@@ -56,7 +51,7 @@ def callback(request):
         authorization_response = request.build_absolute_uri()
         client = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
         token = client.fetch_token('https://accounts.google.com/o/oauth2/token', authorization_response=authorization_response, client_secret=client_secret)
-        UserProfile.objects.update_or_create(defaults=token, user=user) 
+        UserProfile.objects.update_or_create(defaults=token, user=user)
         # TODO there is no way of ensuring the Django email login is the same as the Google one
         # Either eliminate Django login altogether, or make it clearer which email address is used
         return redirect('https://loorolls.herokuapp.com/rolls/')  # TODO Check refresh token in response and change prompt to 'consent' if not. Right now I'm just hardcoding consent. Plus this redirect is probably bad.
