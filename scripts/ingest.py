@@ -21,7 +21,7 @@ def query_gmail(client, query_string):
 
 def write_results_locally(result, path_template=None):
     if path_template is None:
-        path_template = "gmail-results-{}.json"
+        path_template = "experiments/gmail-results-{}.json"
     formatted_time = datetime.datetime.now().isoformat()
     path = path_template.format(formatted_time)
     with open(path, "w") as outfile:
