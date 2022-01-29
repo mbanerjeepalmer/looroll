@@ -25,7 +25,8 @@ def roll(request):
     try:
         # TODO obviously need to be storing these separately and then displaying then showing each in an iframe
         # But ultimately I should also be formatting each one so the iframe isn't necessary
-        html = Roll.objects.filter(user=user).latest(field_name='created_date').html_string
+        html = (Roll.objects.filter(user=user)
+                            .latest(field_name='created_date').html_string)
         return HttpResponse(html)
     except ObjectDoesNotExist:
         return HttpResponse("You've run out of loo roll (if you had any in the first place).")
