@@ -14,4 +14,3 @@ venv
 *.sublime-workspace
 experiments/
 
-credentials.json

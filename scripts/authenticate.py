@@ -57,7 +57,7 @@ def server_oauth(authorization_response):
     return token, client
 
 
-def write_token_to_json(token, path="./gmail_token.json"):
+def write_token_to_json(token, path="./secrets/gmail_token.json"):
     """
     Writes a token dictionary to a JSON file.
 
@@ -68,7 +68,7 @@ def write_token_to_json(token, path="./gmail_token.json"):
         outfile.write(json.dumps(token))
 
 
-def read_token_from_json(path="./gmail_token.json"):
+def read_token_from_json(path="./secrets/gmail_token.json"):
     with open(path, "r") as infile:
         token = json.loads(infile.read())
     return token

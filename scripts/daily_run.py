@@ -1,6 +1,7 @@
 import test_authenticate
 import authenticate
 import ingest
+import json
 
 
 def orchestrate_auth():
@@ -26,5 +27,7 @@ if __name__ == "__main__":
     client = orchestrate_auth()
     messages = ingest.pull_from_gmail(client)
     print(messages)
-    ingest.write_results_locally(messages)
+    ingest.write_string_locally(
+        json.dumps(messages), name_prefix="gmail-ids", extension="json"
+    )
     print("Written")

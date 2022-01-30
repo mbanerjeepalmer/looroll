@@ -1,4 +1,5 @@
 import authenticate
+import ingest
 
 token = {
     "access_token": "ya29.A0ARrdaM-oUGhQuyvXAQWsE-OrSOCZQqaFk3OydxFh-yW5h9WXebCS6hcD5kGEeuKV4GVb8cW7U6uTrakwnJsJWlvpmcaEdrecPNWPvSIakGN1-m2meerb4j7aXBmt6fpWnodhwlbW_l6qzt5dWvsxLSiRGgWl",
@@ -8,14 +9,18 @@ token = {
     "token_type": "Bearer",
     "expires_at": 1643488292.6039147,
 }
+message_id = "17ea77884d3f99f4"
 
 
-def test_user_oauth():
-    assert type(authenticate.user_oauth()[0]) == str
+def test_get_email():
+    client = authenticate.refresh_access_token(token)
+    assert type(ingest.get_email(client, message_id)) == str
 
 
-def test_write_token_to_json(tmpdir):
-    outfile = tmpdir.join("gmail_token.json")
-    authenticate.write_token_to_json(token, path=str(outfile))
-    contents = outfile.read()
-    assert type(contents) == str
+def test_write_complete_email_locally():
+    client = authenticate.refresh_access_token(token)
+    parsed_email = ingest.get_email(client, message_id)
+    path = ingest.write_complete_email_locally(parsed_email)
+    with open(path, 'r') as infile:
+        content = infile.read()
+    assert len(content) > 0
