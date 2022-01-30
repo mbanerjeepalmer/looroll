@@ -1,12 +1,23 @@
 import datetime
 import json
 import email
-from email import policy
 import pdb
 import logging
 import base64
+from email.policy import default
 
 logging.basicConfig(level=logging.DEBUG)
+
+
+def orchestrate_ingestion(client):
+    message_result = pull_from_gmail(client)
+    logging.info("Pulled from Gmail")
+    logging.debug(message_result)
+    parsed_emails = get_all_emails(client, message_result)
+    logging.info("Writing emails locally")
+    for parsed_email in parsed_emails:
+        path = write_complete_email_locally(parsed_email)
+        logging.info("Wrote", path)
 
 
 def pull_from_gmail(client, query_string="newer_than:7d"):
@@ -51,15 +62,22 @@ def write_string_locally(string, name_prefix=None, extension=""):
         outfile.write(string)
     return path
 
+
 def write_complete_email_locally(parsed_email):
-    name_prefix = "complete-{}-{}".format(parsed_email["from"], parsed_email["Received"])
+    name_prefix = "complete-{}-{}".format(
+        parsed_email["from"], parsed_email["Received"]
+    )
     return write_string_locally(
         json.dumps(parsed_email), name_prefix=name_prefix, extension="json"
     )
 
 
 def write_email_body_locally(parsed_email):
-    name_prefix = "{}-{}".format(parsed_email["from"], parsed_email["Received"])
+    if 'from' in parsed_email.keys():
+        sender = parsed_email['from']
+    else:
+        sender = 'unknown'
+    name_prefix = "{}-{}".format(sender, parsed_email["Received"])
     return write_string_locally(
         parsed_email["body_html"], name_prefix=name_prefix, extension="html"
     )
@@ -69,13 +87,31 @@ def get_email(client, message_id, user="me"):
     message = gmail_request(client, message_id=message_id, params={"format": "raw"})
     raw_body = message["raw"]
     msg_str = base64.urlsafe_b64decode(raw_body.encode("ASCII"))
-    msg_parser = email.parser.BytesFeedParser(policy=email.policy.default)
+    msg_parser = email.parser.BytesFeedParser(policy=default)
     msg_parser.feed(msg_str)
     mimedocument = msg_parser.close()
     headers = dict(mimedocument)
     body_html = mimedocument.get_body().get_content()
     parsed_email = {"body_html": body_html, **headers}
     return parsed_email
+
+
+def get_all_emails(client, query_results):
+    """
+    Returns a list of dictionaries.
+
+    :param client [TODO:type]: [TODO:description]
+    :param query_results [TODO:type]: [TODO:description]
+    """
+    message_ids = [message["id"] for message in query_results["messages"]]
+    parsed_emails = []
+    for message_id in message_ids:
+        try:
+            parsed_email = get_email(client, message_id)
+            parsed_emails.append(parsed_email)
+        except KeyError as e:
+            logging.error("Could not parse email", message_id)
+    return parsed_emails
 
 
 def gmail_request(client, user="me", params=None, message_id=None):

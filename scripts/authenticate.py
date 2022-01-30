@@ -74,13 +74,13 @@ def read_token_from_json(path="./secrets/gmail_token.json"):
     return token
 
 
-def refresh_access_token(token):
+def refresh_access_token(old_token):
     # TODO change to
     # https://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#third-recommended-define-automatic-token-refresh-and-update
     # extra = {'client_id': client_id, 'client_secret': client_secret}
-    refresh_token = token.pop("refresh_token")
+    refresh_token = old_token["refresh_token"]
     client = OAuth2Session(client_id)
-    token = client.refresh_token(
+    client.refresh_token(
         "https://accounts.google.com/o/oauth2/token",
         # TOKEN_URL,
         refresh_token=refresh_token,
