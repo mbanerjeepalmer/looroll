@@ -14,13 +14,13 @@ message_id = "17ea77884d3f99f4"
 
 def test_get_email():
     client = authenticate.refresh_access_token(token)
-    assert type(ingest.get_email(client, message_id)) == str
+    assert type(ingest.get_email(client, message_id)) == dict
 
 
 def test_write_complete_email_locally():
     client = authenticate.refresh_access_token(token)
     parsed_email = ingest.get_email(client, message_id)
     path = ingest.write_complete_email_locally(parsed_email)
-    with open(path, 'r') as infile:
+    with open(path, "r") as infile:
         content = infile.read()
     assert len(content) > 0

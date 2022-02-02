@@ -1,7 +1,6 @@
 import datetime
 import json
 import email
-import pdb
 import logging
 import base64
 from email.policy import default
@@ -17,7 +16,7 @@ def orchestrate_ingestion(client):
     logging.info("Writing emails locally")
     for parsed_email in parsed_emails:
         path = write_complete_email_locally(parsed_email)
-        logging.info("Wrote", path)
+        logging.info("Wrote " + path)
 
 
 def pull_from_gmail(client, query_string="newer_than:7d"):
@@ -64,20 +63,15 @@ def write_string_locally(string, name_prefix=None, extension=""):
 
 
 def write_complete_email_locally(parsed_email):
-    name_prefix = "complete-{}-{}".format(
-        parsed_email["from"], parsed_email["Received"]
-    )
+    formatted_time = datetime.datetime.now().isoformat()
+    name_prefix = "complete-{}-{}".format(formatted_time, parsed_email["gmail_id"])
     return write_string_locally(
         json.dumps(parsed_email), name_prefix=name_prefix, extension="json"
     )
 
 
 def write_email_body_locally(parsed_email):
-    if 'from' in parsed_email.keys():
-        sender = parsed_email['from']
-    else:
-        sender = 'unknown'
-    name_prefix = "{}-{}".format(sender, parsed_email["Received"])
+    name_prefix = "{}-{}".format(parsed_email["gmail_id"], parsed_email["Received"])
     return write_string_locally(
         parsed_email["body_html"], name_prefix=name_prefix, extension="html"
     )
@@ -92,7 +86,7 @@ def get_email(client, message_id, user="me"):
     mimedocument = msg_parser.close()
     headers = dict(mimedocument)
     body_html = mimedocument.get_body().get_content()
-    parsed_email = {"body_html": body_html, **headers}
+    parsed_email = {"body_html": body_html, "gmail_id": message_id, **headers}
     return parsed_email
 
 
@@ -110,7 +104,7 @@ def get_all_emails(client, query_results):
             parsed_email = get_email(client, message_id)
             parsed_emails.append(parsed_email)
         except KeyError as e:
-            logging.error("Could not parse email", message_id)
+            logging.error("Could not parse email", message_id, e)
     return parsed_emails
 
 
