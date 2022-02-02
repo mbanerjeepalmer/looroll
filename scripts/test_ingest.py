@@ -17,10 +17,11 @@ def test_get_email():
     assert type(ingest.get_email(client, message_id)) == dict
 
 
-def test_write_complete_email_locally():
+def test_write_complete_email_locally(tmpdir):
     client = authenticate.refresh_access_token(token)
     parsed_email = ingest.get_email(client, message_id)
-    path = ingest.write_complete_email_locally(parsed_email)
+    base_path = str(tmpdir)
+    path = ingest.write_complete_email_locally(parsed_email, base_path=base_path)
     with open(path, "r") as infile:
         content = infile.read()
     assert len(content) > 0

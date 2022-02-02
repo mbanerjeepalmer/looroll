@@ -32,8 +32,9 @@ https://127.0.0.1:8000/auth/complete/google-oauth2/?state=yxSwdzzSpkN9Qxqxm6Mr5j
 - Now writes
 
 TODO
-- [ ] Tests for 'daily_run'
-- [ ] Fix side effects from current tests
+- [X] Fix side effects from current tests
+- [ ] Use a pickled (or other non-API) version of `parsed_email`.
 - [ ] Fix duplicate dates in filenames
 - [ ] Write HTML files to folder
 - [ ] Build static site from folder
+- [ ] Tests for 'daily_run'
