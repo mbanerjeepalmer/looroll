@@ -31,10 +31,15 @@ https://127.0.0.1:8000/auth/complete/google-oauth2/?state=yxSwdzzSpkN9Qxqxm6Mr5j
 # 2 February 2022
 - Now writes
 
+# 7 February 2022
+- [ ] Writes HTML files to folder.
+	- Should specify that the roll name is today's date.
+
 TODO
 - [X] Fix side effects from current tests
 - [X] Fix duplicate dates in filenames
-- [ ] Write HTML files to folder
+- [X] Write HTML files to folder
+- [ ] Build index page from folder
 - [ ] Build static site from folder
 - [ ] Use a pickled (or other non-API) version of `parsed_email`.
 - [ ] Tests for 'daily_run'
