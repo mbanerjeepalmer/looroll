@@ -50,13 +50,13 @@ def query_gmail(client, query_string):
     return results
 
 
-def write_string_locally(string, name_prefix="", extension="", base_path=""):
+def write_string_locally(string, name_suffix="", extension="", base_path=""):
 
-    if name_prefix:
-        name_prefix = name_prefix + "-"
+    if name_suffix:
+        name_suffix = name_suffix + "-"
     formatted_time = datetime.datetime.now().isoformat()
-    filename = "{name_prefix}{formatted_time}.{extension}".format(
-        name_prefix=name_prefix, formatted_time=formatted_time, extension=extension
+    filename = "{formatted_time}-{name_suffix}.{extension}".format(
+        name_suffix=name_suffix, formatted_time=formatted_time, extension=extension
     )
     if not base_path:
         base_path = "./experiments"
@@ -68,19 +68,12 @@ def write_string_locally(string, name_prefix="", extension="", base_path=""):
 
 
 def write_complete_email_locally(parsed_email, base_path=""):
-    name_prefix = "complete-{}".format(parsed_email["gmail_id"])
+    name_suffix = "complete-{}".format(parsed_email["gmail_id"])
     return write_string_locally(
         json.dumps(parsed_email),
-        name_prefix=name_prefix,
+        name_suffix=name_suffix,
         extension="json",
         base_path=base_path,
-    )
-
-
-def write_email_body_locally(parsed_email):
-    name_prefix = "{}-{}".format(parsed_email["gmail_id"], parsed_email["Received"])
-    return write_string_locally(
-        parsed_email["body_html"], name_prefix=name_prefix, extension="html"
     )
 
 

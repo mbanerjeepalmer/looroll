@@ -70,7 +70,7 @@ def generate_path(sheet, directory):
 
 
 def files_to_pages():
-    sheets = gather_from_files()
+    sheets = gather_from_files(pathname="experiments/20FebTest/*.json")
     directory = generate_directory()
     write_pages(sheets, directory)
     rendered = render_index(sheets, directory)
